@@ -61,8 +61,8 @@ module selective_infill()mirror([0,1,0]) translate([-50, -33, 0.6])
     {
         difference()
         {
-        #translate([50,50,0.6]) rotate([0,0,90]) cylinder( h=6, r=11.7, $fn=30);//0, 17, 0.6
-        #translate([50,50,-1]) rotate([0,0,90]) cylinder( h=10, r=11.5, $fn=30);
+        translate([50,50,0.6]) rotate([0,0,90]) cylinder( h=6, r=11.7, $fn=30);//0, 17, 0.6
+        translate([50,50,-1]) rotate([0,0,90]) cylinder( h=10, r=11.5, $fn=30);
         }
         difference()
         {
