@@ -5,6 +5,7 @@
 // http://www.reprap.org/wiki/Prusa_Mendel
 // http://prusamendel.org
 // modifed for china supply and more parametric 23-Mar-2017
+// modified for even more parametricity and modules + comments for clarity by jon 31-Mar-2017
 
 PSU_width = 113.7;
 PSU_depth = 49.1;
@@ -15,7 +16,16 @@ PSU_hole2 = (PSU_width /2) + 25;
 PSU_side_hole1 = 12;
 PSU_side_hole2 = 12+23;
 
+psu_hole_height = 33; // measured from end of the psu
+cover_height = 50+ 15;
+void_height = 26; // gap in end for wires and stuff (including bottom thickness)
+terminal_recess_height = 18.5; // for the terminal block
+terminal_recess_width = 17; // for the terminal block
+lock_tab_back_offset = 13.5;  // offset from the back of the psu to the start of the locking tab that mates with slot in the side
+lock_tab_end_offset = 12.2; // offset from the end of the psu to the start of the locking tab
+lock_tab_depth = 20;  // width of the locking tab
 
+// terminology: BACK has the fillets, FRONT has prusa text and connector cutouts, LEFT is the ledge the psu sits on, RIGHT is the cutout end that touches the prusa frame
 
 module PSU_COVER()
 {
@@ -23,23 +33,23 @@ module PSU_COVER()
         union() {
             
             // main cube
-            translate([0,0,-1])cube([PSU_width-4,50+15,PSU_depth+7]); // Base
+            translate([0,0,-1])cube([PSU_width-4,cover_height,PSU_depth+7]); // Base
 
             // strengthening fillets on back centred on mounting holes
-            translate([PSU_hole1-(14-0.5)/2,0,-3.5])cube([14-0.5,50+15,5]); // Back pillar 1
-            translate([PSU_hole2-14/2,0,-3.5])cube([14,50+15,5]); // Back pillar 2
+            translate([PSU_hole1-(14-0.5)/2,0,-3.5])cube([14-0.5,cover_height,5]); // Back pillar 1
+            translate([PSU_hole2-14/2,0,-3.5])cube([14,cover_height,5]); // Back pillar 2
 
-            // end face
-            translate([PSU_width-4,0,-1])cube([6,50+15,PSU_depth+7]); 
+            // left end
+            translate([PSU_width-4,0,-1])cube([6,cover_height,PSU_depth+7]); 
 
             // locking tab that locates on PSU grille
-            translate([-2,26+12,19])cube([2,2.5,23]); 
+            translate([-2,void_height + lock_tab_end_offset,2+lock_tab_back_offset])cube([2,2.5,lock_tab_depth]); 
+
+            // the right hand end section that faces the prusa frame
+            FRAME_SKIRTS();
 
             // decorative "wedge" in side
             translate([0,35,PSU_depth-2.5])scale([1.2,1,0.2])rotate([-28,-50,-58])cube([45,45,30]);
-
-            // the edge section that faces the prusa frame
-            FRAME_SKIRTS();
         
         }
 
@@ -47,19 +57,19 @@ module PSU_COVER()
         PRETTY_CORNERS();
 
         // main, full depth cutout
-        translate([3,2,2])cube([PSU_width-9.98,65.02,PSU_depth+0.32]); // main cutout
+        translate([3,2,2])cube([PSU_width-9.98,cover_height+10,PSU_depth+0.32]); // main cutout
 
         // psu cutout, first part
-        translate([-3,50-16.4+15-4,2])cube([PSU_width+1,16.5+4,PSU_depth+0.3]); // insert cutout
+        translate([-3,void_height + terminal_recess_height,2])cube([PSU_width+1,cover_height,PSU_depth+0.3]); // insert cutout
 
         // cutout in end to allow for connector block
-        translate([-3,26 ,2])cube([10,100,17]); // right bottom cutout
+        translate([-3,26 ,2])cube([10,cover_height,terminal_recess_width]); // right bottom cutout
 
         // cutout for ledge that PSU sits on
-        translate([PSU_width-12, 50-16.4-17.6+15+0.9-4 ,2])cube([10,100,PSU_depth+0.3]); // left bottom cutout
+        translate([PSU_width-12, void_height,2])cube([10,20 + cover_height,PSU_depth+0.3]); // left bottom cutout
 
         // side cutout - seems unnecessary
-        translate([-3,50-16.4-17.6+15+0.9,2])cube([PSU_width+1,100,10]); //  bottom cutout
+        // translate([-3,50-16.4-17.6+15+0.9,2])cube([PSU_width+1,100,10]); //  bottom cutout
 
         // IEC socket and switch cutout
         translate([5.5,0,0]) SOCKET_CUTOUT();
@@ -117,58 +127,59 @@ module CABLE_EXIT()
 
 module MOUNTING_HOLES()
 {
-    translate([PSU_hole1,28+32.5,-10])cylinder(r=2,h=50,$fn=15); //  left back mounthole cutout
-    translate([PSU_hole1,28+32.5,-3.7])cylinder(r2=2, r1=3.5,h=1.5,$fn=15);
+    // back mounting holes in stengthening fillets, and countersinks
+    translate([PSU_hole1,psu_hole_height + void_height,-10])cylinder(r=2,h=50,$fn=15); //  left back mounthole cutout
+    translate([PSU_hole1,psu_hole_height + void_height,-3.7])cylinder(r2=2, r1=3.5,h=1.5,$fn=15);
 
-    translate([PSU_hole2,28+32.5,-10])cylinder(r=2,h=50,$fn=15); //  right back mounthole cutout
-    translate([PSU_hole2,28+32.5,-3.7])cylinder(r2=2, r1=3.5,h=1.5,$fn=15);
+    translate([PSU_hole2,psu_hole_height + void_height,-10])cylinder(r=2,h=50,$fn=15); //  right back mounthole cutout
+    translate([PSU_hole2,psu_hole_height + void_height,-3.7])cylinder(r2=2, r1=3.5,h=1.5,$fn=15);
 
 
-     // 50-16.4+15-4
-    // fiddling with screw locations here
-    translate([PSU_width+31,28 + 32.5,PSU_side_hole1+2])rotate([0,-90,0])cylinder(r=2,h=50,$fn=35); // Left side bracket screw hole
-    translate([PSU_width+2.1,28+32.5,PSU_side_hole1+2])rotate([0,-90,0])cylinder(r2=2, r1=3.5,h=3,$fn=15);
+    
+    translate([PSU_width+31,psu_hole_height + void_height,PSU_side_hole1+2])rotate([0,-90,0])cylinder(r=2,h=50,$fn=35); // Left side bracket screw hole
+    translate([PSU_width+2.1,psu_hole_height + void_height,PSU_side_hole1+2])rotate([0,-90,0])cylinder(r2=2, r1=3.5,h=3,$fn=15);
 
-    translate([PSU_width+31,28+32.5,PSU_side_hole2+2])rotate([0,-90,0])cylinder(r=2,h=50,$fn=35); // Left side bracket screw hole
-    translate([PSU_width+2.1,28+32.5,PSU_side_hole2+2])rotate([0,-90,0])cylinder(r2=2, r1=3.5,h=3,$fn=15);
+    translate([PSU_width+31,psu_hole_height + void_height,PSU_side_hole2+2])rotate([0,-90,0])cylinder(r=2,h=50,$fn=35); // Left side bracket screw hole
+    translate([PSU_width+2.1,psu_hole_height + void_height,PSU_side_hole2+2])rotate([0,-90,0])cylinder(r2=2, r1=3.5,h=3,$fn=15);
 }
 
 module FRAME_SKIRTS()
 {
-     translate([-1.6,0,0])cube([1.65,65,2]); // Frame skirt 1
-     translate([-1.6,0,0])cube([1.65,30-4,PSU_depth+6]); // Frame skirt 2
-     translate([-1.6,0,PSU_depth+2])cube([1.65,65,4]); // Frame skirt 3
+     translate([-1.6,0,0])cube([1.65,cover_height,2]); // Frame skirt 1
+     translate([-1.6,0,0])cube([1.65,void_height,PSU_depth+6]); // Frame skirt 2
+     translate([-1.6,0,PSU_depth+2])cube([1.65,cover_height,4]); // Frame skirt 3
        
 }
 
 module PRETTY_CORNERS()
 {
-    //pretty corners
+    // bevels on the base
     translate([-11,-2,-2])rotate([0,0,-45])cube([10,10,PSU_depth+9]);
     translate([PSU_width-1,-2,-2])rotate([0,0,-45])cube([10,10,PSU_depth+9]);
-
     translate([-3,-9,-5])rotate([-45,0,0])cube([PSU_width+31,10,10]);
     translate([-3,-12,PSU_depth+7])rotate([-45,0,0])cube([PSU_width+31,10,10]);
 
-    translate([-3,45+15,-5])rotate([-45,0,0])cube([PSU_width+31,10,10]);
-    translate([-3,48+15,PSU_depth+7])rotate([-45,0,0])cube([PSU_width+31,10,10]);
+    // bevels on the top
+    translate([-3,cover_height - 5,-5])rotate([-45,0,0])cube([PSU_width+31,10,10]);
+    translate([-3,cover_height-2,PSU_depth+7])rotate([-45,0,0])cube([PSU_width+31,10,10]);
+    translate([PSU_width-4,cover_height+5,-2])rotate([0,0,-45])cube([10,10,PSU_depth+9]);
 
-    translate([PSU_width-4,70,-2])rotate([0,0,-45])cube([10,10,PSU_depth+9]);
-
-
+    // corner notches on base
     translate([PSU_width-4,0-10,-20])rotate([0,-45,-45])cube([20,20,20]);
     translate([PSU_width-4,0-10,PSU_depth-4])rotate([0,-45,-45])cube([20,20,20]);
 
+    // corner notches on top
+    translate([PSU_width-4,cover_height-5,-10])rotate([-35,-45,-45])cube([20,20,20]);
+    translate([PSU_width-4,cover_height-5,PSU_depth+16])rotate([-55,48,-48])cube([20,20,20]);
 
-    translate([PSU_width-4,60,-10])rotate([-35,-45,-45])cube([20,20,20]);
-    translate([PSU_width-4,60,PSU_depth+16])rotate([-55,48,-48])cube([20,20,20]);
+    // vertical groove on the front
+    translate([PSU_width-20,4,PSU_depth+19.5])rotate([0,45,0])cube([20,cover_height+10,20]);
 
-    translate([PSU_width-20,-5,PSU_depth+19.5])rotate([0,45,0])cube([20,90,20]);
+    // vertical groove on the back
+    translate([PSU_width-20,4,-14.5])rotate([0,45,0])cube([20,cover_height+10,20]);
 
-    translate([PSU_width-20,4,-14.5])rotate([0,45,0])cube([20,90,20]);
-
-
-    translate([-14,-5,PSU_depth+19.5])rotate([0,45,0])cube([20,90,20]);
+    // other groove on the front
+    translate([-14,-5,PSU_depth+19.5])rotate([0,45,0])cube([20,cover_height+10,20]);
 }
 
 module PSU_Y_REINFORCEMENT()
