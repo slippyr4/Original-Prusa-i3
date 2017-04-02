@@ -5,6 +5,8 @@
 // http://www.reprap.org/wiki/Prusa_Mendel
 // http://prusamendel.org
 
+// adjusted for M5 idler screw
+
 use <x-end.scad>
 
 
@@ -12,9 +14,15 @@ use <x-end.scad>
 module x_end_idler_holes(){
     x_end_holes();
     translate([0,3.5,0]){
-    translate(v=[0,-22,30.25]) rotate(a=[0,-90,0]) cylinder(h = 80, r=1.8, $fn=30);
-    translate(v=[1.5,-22,30.25]) rotate(a=[0,-90,0]) cylinder(h = 10, r=3.1, $fn=30);
-    translate(v=[-21.5,-22,30.25]) rotate(a=[0,-90,0]) rotate(a=[0,0,30]) cylinder(h = 80, r=3.2, $fn=6);
+    
+    // drill for idler
+    translate(v=[0,-22,30.25]) rotate(a=[0,-90,0]) cylinder(h = 80, r=2.7, $fn=30);
+
+    // recess for screw head
+    translate(v=[2.0,-22,30.25]) rotate(a=[0,-90,0]) cylinder(h = 10, r=9.4/2, $fn=30);
+
+    // nut trap
+    translate(v=[-22,-22,30.25]) rotate(a=[0,-90,0]) rotate(a=[0,0,30]) cylinder(h = 80, r=9.4/2, $fn=6);
         
  }
 }

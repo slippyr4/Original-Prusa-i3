@@ -7,18 +7,18 @@
 // modifed for china supply and more parametric 23-Mar-2017
 // modified for even more parametricity and modules + comments for clarity by jon 31-Mar-2017
 
-PSU_width = 113.7;
-PSU_depth = 49.1;
+PSU_width = 113.75;
+PSU_depth = 49.2;
 PSU_height =205;
 
-PSU_hole1 = (PSU_width /2) - 25;
-PSU_hole2 = (PSU_width /2) + 25;
+PSU_hole1 = 31.5;
+PSU_hole2 = 31.5+50;
 PSU_side_hole1 = 12;
 PSU_side_hole2 = 12+23;
 
 psu_hole_height = 33; // measured from end of the psu
-cover_height = 50+ 15;
-void_height = 26; // gap in end for wires and stuff (including bottom thickness)
+cover_height = 45 + 77.3 - 21;
+void_height = 77.3 - 21; // gap in end for wires and stuff (including bottom thickness)
 terminal_recess_height = 18.5; // for the terminal block
 terminal_recess_width = 17; // for the terminal block
 lock_tab_back_offset = 13.5;  // offset from the back of the psu to the start of the locking tab that mates with slot in the side
@@ -63,7 +63,7 @@ module PSU_COVER()
         translate([-3,void_height + terminal_recess_height,2])cube([PSU_width+1,cover_height,PSU_depth+0.3]); // insert cutout
 
         // cutout in end to allow for connector block
-        translate([-3,26 ,2])cube([10,cover_height,terminal_recess_width]); // right bottom cutout
+        translate([-3,void_height ,2])cube([10,cover_height,terminal_recess_width]); // right bottom cutout
 
         // cutout for ledge that PSU sits on
         translate([PSU_width-12, void_height,2])cube([10,20 + cover_height,PSU_depth+0.3]); // left bottom cutout
@@ -72,7 +72,7 @@ module PSU_COVER()
         // translate([-3,50-16.4-17.6+15+0.9,2])cube([PSU_width+1,100,10]); //  bottom cutout
 
         // IEC socket and switch cutout
-        translate([5.5,0,0]) SOCKET_CUTOUT();
+        translate([20,0,0]) SOCKET_CUTOUT();
 
         // prusa 3d text on side
         translate([20,50,PSU_depth+5.5]) linear_extrude(height = 1) text("Prusa3D", center=true);
@@ -111,7 +111,13 @@ module SOCKET_CUTOUT()
     translate([offset - screw_separation/2 + iec_width/2,2 + iec_height/2,PSU_depth-9])cylinder(r=2,h=PSU_depth+1, $fn=8); // socket right hole cutout
     translate([offset + screw_separation/2 + iec_width/2,2 + iec_height/2,PSU_depth-9])cylinder(r=2,h=50, $fn=8); // socket left hole cutout
 
-    translate([1,2,PSU_depth-5])cube([20,14,30]); // switch cutout
+    translate([1,2,PSU_depth- 15 +2]) {
+        cube([20,14,30]);
+        translate([- sqrt(18)/2,14,15]) rotate([90,45,0]) cube([3,3,14]);
+        translate([20 - sqrt(18)/2,14,15]) rotate([90,45,0]) cube([3,3,14]);
+    }
+
+
 
     translate([offset - screw_separation/2 + iec_width/2,2 + iec_height/2,PSU_depth-9])cylinder(r=3.25,h=15-1.5, $fn=6); // socket left hole cutout nuttrap
     translate([offset + screw_separation/2 + iec_width/2,2 + iec_height/2,PSU_depth-9])cylinder(r=3.25,h=15-1.5, $fn=6); // socket left hole cutout nuttrap
@@ -265,4 +271,6 @@ module FINAL_PART(){
 
 FINAL_PART();
 //rotate([90,0,-90]) %translate([-2.0,30-4,2]) PSU();
+
+
 
