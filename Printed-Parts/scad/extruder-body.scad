@@ -73,7 +73,7 @@ difference()
 
 
     // PINDA lower hole
-    translate([-5.5,50,6])rotate([-90,0,0])cylinder(r=4.1, h=40, $fn=20);
+    translate([-5.5,50,6])rotate([-90,0,0])cylinder(r=4.0, h=40, $fn=20);
 
     // M3 screws 
     translate([-20,49,12])rotate([0,90,0])cylinder(r=1.5, h=24, $fn=20);    
@@ -109,8 +109,8 @@ difference()
     translate([7,46,-1]) rotate([0,0,30]) cube([15,11,25]);
 
     //PINDA mounting hole
-    translate([-5.5,60,6])rotate([90,0,0])cylinder(r=4.2, h=30, $fn=20); 
-    translate([-5.5,41,6])rotate([90,0,0])cylinder(r=4.4, h=5, $fn=20); 
+    translate([-5.5,60,6])rotate([90,0,0])cylinder(r=4.0, h=30, $fn=20); 
+    translate([-5.5,41,6])rotate([90,0,0])cylinder(r=4.2, h=5, $fn=20); 
 
     // bottom cut
     translate([-15,54.5,-1])  cube([20 , 8,20]); 
@@ -118,8 +118,8 @@ difference()
     
     for ( i = [0 : 14] )
         {
-          translate([-5.5,39+i,6])rotate([90,0,0])cylinder(r1=4.5, r2=3, h=1, $fn=20); 
-          translate([-5.5,40+i,6])rotate([90,0,0])cylinder(r1=3, r2=4.5, h=1, $fn=20);
+          translate([-5.5,39+i,6])rotate([90,0,0])cylinder(r1=4.3, r2=3, h=1, $fn=20); 
+          translate([-5.5,40+i,6])rotate([90,0,0])cylinder(r1=3, r2=4.3, h=1, $fn=20);
         }
 
 }
