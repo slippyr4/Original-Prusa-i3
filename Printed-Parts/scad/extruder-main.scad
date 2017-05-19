@@ -77,7 +77,7 @@ difference(){
 
 mirror([1,0,0]){
 //  Filament visualisation
-    %translate([-35/2,-50,15])rotate([-90,0,0])cylinder(r=1.75/2, h=100, $fn=20);
+    translate([-35/2,-50,15])rotate([-90,0,0])cylinder(r=1.75/2, h=100, $fn=20);
 
 // Motor visualisation
     translate([-42,-42,-1]) %cube([42,42,1]);
@@ -99,7 +99,7 @@ difference(){
     translate([-21,-21,-2]) cylinder(r=11.5, h=33, $fn=200);
     
     //filament hole
-    translate([-35/2,-42,15])rotate([-90,0,0])cylinder(r=2.5/2, h=20, $fn=20);
+    %translate([-35/2,-42,15])rotate([-90,0,0])cylinder(r=2.5/2, h=20, $fn=20);
     translate([-35/2,-42,15])rotate([-90,0,0])cylinder(r2=2.2/2,r1=3.6/2, h=1.5, $fn=20);
 }
 

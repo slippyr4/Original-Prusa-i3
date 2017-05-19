@@ -7,11 +7,17 @@
 
 // circuit board dimensions
 
-// MKS SBASE
-board_length=146.5;
-hole_offset=4;
-board_width=95;
+// // MKS SBASE
+ board_length=146.5;
+ hole_offset=4;
+ board_width=95;
 top_gap=6;
+
+// MKS BASE
+//board_length=110.0;
+//hole_offset=5;
+//board_width=90;
+//top_gap=6;
 
 // RAMBO mini
 // board_length=103;
@@ -19,6 +25,11 @@ top_gap=6;
 // board_width=69;
 // top_gap=0;
 
+// other tweaks
+hbp_offset = -6; // shift the HBP cable entry assembly in the X axis
+
+
+// general parameters that are computed
 case_length=board_length+15.5+top_gap; // original 118.5
 case_width=board_width+23; // original 92
 case_height=35; // original 35. this isn't really adequately parameterized
@@ -35,8 +46,9 @@ module main_body()
     cube( [ 1.5 , case_width , case_height ] );  
     // rear panel
     translate( [ 0 , case_width-2 , 0 ] ) cube( [ case_length-13 , 2 , case_height ] );  
+
     // heatbed ziptie reinforcement
-    translate( [ case_length-55.5 , case_width-3.5 , 0.5 ] ) cube( [ 6.5 , 2 , case_height-0.5 ] );   
+    translate( [ case_length-55.5 +hbp_offset, case_width-3.5 , 0.5 ] ) cube( [ 6.5 , 2 , case_height-0.5 ] );   
 
     // upper panel frame reinforcement
     translate( [ 0 , 0 , 1 ] ) cube( [ 5.5 , 7 , case_height-1 ] );  
@@ -64,7 +76,7 @@ module main_body()
     // RAMBo mounting holes
     translate( [ 3.5+board_length-hole_offset  +top_gap, 10+hole_offset , 1 ] ) rotate([0,0,90]) cylinder( h = 7, r = 5.5, $fn=6); 
     translate( [ 3.5+board_length-hole_offset  +top_gap, 10+board_width-hole_offset , 1 ] ) rotate([0,0,90]) cylinder( h = 7, r = 5.5, $fn=6); 
-    translate( [ 3.5+hole_offset  +top_gap, 10+hole_offset , 1 ] ) cylinder( h = 7, r = 5.5, $fn=6); 
+    #translate( [ 3.5+hole_offset  +top_gap, 10+hole_offset , 1 ] ) cylinder( h = 7, r = 5.5, $fn=6); 
     translate( [ 3.5+hole_offset  +top_gap, 10+board_width-hole_offset , 1 ] ) cylinder( h = 7, r = 5.5, $fn=6); 
     
     // corners reinforcement
@@ -85,7 +97,7 @@ module main_body()
     translate( [ case_length-20.5 , 0 , 0 ] ) cube( [ 20.5 , 4 , 10 ] ); 
 
     // heatbed filament holder body
-    translate( [ case_length-36.9 ,case_width-1.65 , 24 ] ) rotate([0,90,0]) cylinder( h = 18, r = 5, $fn=6); 
+    translate( [ case_length-36.9 + hbp_offset,case_width-1.65 , 24 ] ) rotate([0,90,0]) cylinder( h = 18 - hbp_offset, r = 5, $fn=6); 
 
     // door closing corner
     translate( [ case_length-16.5 , case_width-3.5 , case_height ] ) cylinder( h = 3, r1=2.5, r2=1, $fn=30);   
@@ -175,22 +187,22 @@ module cutouts(){
     // heatbed cable opening hole
     difference()
     {
-    translate( [ case_length-43 , case_width+2 , 24 ] ) rotate([90,90,0]) cylinder( h = 5, r = 7, $fn=6); 
-    translate( [ case_length-47.5 , case_width-12 , 13.5 ] ) cube( [ 8 , 15 , 5] ); 
+        translate( [ case_length-43 +hbp_offset, case_width+2 , 24 ] ) rotate([90,90,0]) cylinder( h = 5, r = 7, $fn=6); 
+        translate( [ case_length-47.5 +hbp_offset, case_width-12 , 13.5 ] ) cube( [ 8 , 15 , 5] ); 
     }
-    translate( [ case_length-45.5 , case_width-12 , 20.5 ] ) cube( [ 5 , 15 , 15] ); 
+    translate( [ case_length-45.5+hbp_offset, case_width-12 , 20.5 ] ) cube( [ 5 , 15 , 15] ); 
 
 
     // heatbed cable ziptie holes
-    translate( [ case_length-54.5 , case_width-5 , 30 ] ) cube( [ 4 , 10 , 2 ] );   
-    translate( [ case_length-54.5 , case_width-5 , 16 ] ) cube( [ 4 , 10 , 2 ] );   
+    translate( [ case_length-54.5 +hbp_offset, case_width-5 , 30 ] ) cube( [ 4 , 10 , 2 ] );   
+    translate( [ case_length-54.5 +hbp_offset, case_width-5 , 16 ] ) cube( [ 4 , 10 , 2 ] );   
 
 
 
     // heatbed filament holder hole
-    translate( [ case_length-37.5 , case_width-3 , 24 ] ) rotate([0,90,0]) cylinder( h = 17, r = 1.8, $fn=30);   
-    translate( [ case_length-37.5 , case_width-3 , 24 ] ) rotate([0,90,0]) cylinder( h = 2, r = 2, r2=1.8, $fn=30);   
-    translate( [ case_length-48.5 , case_width , 15 ] ) cube( [ 30 , 10 , 15] ); 
+    translate( [ case_length-37.5 + hbp_offset, case_width-3 , 24 ] ) rotate([0,90,0]) cylinder( h = 17, r = 1.8, $fn=30);   
+    translate( [ case_length-37.5 +hbp_offset , case_width-3 , 24 ] ) rotate([0,90,0]) cylinder( h = 2, r = 2, r2=1.8, $fn=30);   
+    translate( [ case_length-48.5 +hbp_offset, case_width , 15 ] ) cube( [ 30 - hbp_offset, 10 , 15] ); 
 
 
     // nut traps HEX  
@@ -247,7 +259,9 @@ module cutouts(){
     translate( [ -27 , case_width-12 , -54 ] ) rotate([50,0,45]) cube( [ 50, 50, 50] ); 
     translate( [ case_length+19 , case_width-32 , -10 ] ) rotate([0,0,45]) cube( [ 50, 50, 50] ); 
 
-
+    //usb
+    usb_cutout();
+    
 }
 
 // extruder cable holder
@@ -430,6 +444,42 @@ sbase_hole_offset = 4;
    
 }
 
+module mks_base()
+{
+
+    width = 110; depth =90; thickness=1.7;
+    hole_offset=5;
+
+    difference()
+    {
+        union()
+        {
+            // pcb
+            cube([width,depth,thickness]);
+
+            // usb
+
+            translate([width-15.7-12.3,depth-12,thickness]) cube([12.3,16.4,10.8]);
+        }
+
+        // holes
+        translate([hole_offset,hole_offset,-1]) cylinder(r=3/2,h=10);
+        translate([width-hole_offset,hole_offset,-1]) cylinder(r=3/2,h=10);
+        translate([hole_offset,depth-hole_offset,-1]) cylinder(r=3/2,h=10);
+        translate([width-hole_offset,depth-hole_offset,-1]) cylinder(r=3/2,h=10);
+
+
+    }
+    
+
+}
+
+module usb_cutout()
+{
+    // this is very specific to each board, so you're on your own
+    translate([3.5 + top_gap,10,1+7])  translate([110-15.7-12.3,90-12,thickness]) cube([12.3,50.4,10.8]);
+}
 
 rambo();
-%translate([7.5-4 + top_gap,14-4,1+7])  sbase();
+
+//%translate([3.5 + top_gap,10,1+7])  mks_base();

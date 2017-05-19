@@ -5,12 +5,17 @@
 // http://www.reprap.org/wiki/Prusa_Mendel
 // http://prusamendel.org
 
+// MKS BASE
+board_length=110.0;
+hole_offset=5;
+board_width=90;
+top_gap=6;
 
 // MKS SBASE
-board_length=146.5;
-hole_offset=4;
-board_width=95;
-top_gap=6;
+//board_length=146.5;
+//hole_offset=4;
+//board_width=95;
+//top_gap=6;
 
 // RAMBO mini
 // board_length=103;
@@ -68,7 +73,7 @@ module ventilation_holes()
     //   translate([46 + i,10.5+50,-1]) cube([3.65,19,10]);
 
         // fill width ribs underneath
-        translate([si,10.5,-1]) cube([3.65,case_width-29,1.2]);
+        translate([i,10.5,-1]) cube([3.65,case_width-29,1.2]);
 
         // row 1
         translate([i,10.5,-1]) cube([3.65,width,10]);
@@ -109,13 +114,13 @@ module cutouts()
 // these lot didn't get bottom referenced, and they should, but might need a bit of redesigning. need to understand the hinges better
     // upper hinge cut
     translate( [ -1, cover_width-27.5 , -10 ] ) cube( [ cover_length+2 , 30 , 10 ] );  
-    translate( [ cover_length-106.5 , cover_width , 0 ] ) cube( [ 22.5 , 10 , 10 ] ); 
+    translate( [ cover_length-106.5 -5, cover_width , 0 ] ) cube( [ 22.5+5 , 10 , 10 ] ); 
 
     // upper hinge 
-    translate( [cover_length-106.5 , cover_width-7.5, 6] ) cube( [ 22.5, 10 , 10 ] );       
-    translate( [cover_length-106.5 , cover_width+2.2, 3] ) rotate([70,0,0]) cube( [ 22.5, 10 , 5 ] );    
+    translate( [cover_length-106.5 -5, cover_width-7.5, 6] ) cube( [ 22.5+5, 10 , 10 ] );       
+    translate( [cover_length-106.5 -5, cover_width+2.2, 3] ) rotate([70,0,0]) cube( [ 22.5+5, 10 , 5 ] );    
     // hinge hole in case end if the end is close
-    translate( [ cover_length-84-21.6-1 , cover_width , 4.5 ] ) rotate([0,90,0]) cylinder( h = 22.6, r = 2.5, $fn=30);  
+    translate( [ cover_length-84-21.5-1-5 , cover_width , 4.5 ] ) rotate([0,90,0]) cylinder( h = 22.5+5, r = 2.8, $fn=30);  
 
     // hinge hole
     translate( [ cover_length-85 ,cover_width , 4.5 ] ) rotate([0,90,0]) cylinder( h = 120, r = 2.6, $fn=30);  
